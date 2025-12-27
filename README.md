@@ -16,3 +16,6 @@ Feature Engineering: Combining genre, keywords, cast, and crew into a single fea
 Data Cleaning: Handling missing or inconsistent metadata (e.g., missing cast info or keywords) required careful preprocessing.
 Poster Fetching: Ensuring that posters from TMDB API load correctly, even when some movies do not have poster images.
 Performance Optimization: Precomputing similarity matrices was necessary to ensure fast recommendations in the app.
+
+Conclusion
+This Content-Based Movie Recommendation System demonstrates how combining multiple metadata features into a single tags column and leveraging transformer-based embeddings can create meaningful and accurate movie recommendations. By using cosine similarity, the app delivers fast and relevant suggestions in an interactive interface. The project highlights the importance of data preprocessing, feature integration, and semantic vectorization when building practical machine learning applications.
