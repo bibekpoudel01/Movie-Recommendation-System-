@@ -14,6 +14,7 @@ Fast recommendations using cosine similarity and precomputed similarity matrix
 Easy to use: just select a movie and get recommendations
 ### Demo Screenshot ⚡
 
+![Demo Screenshot](images/Screenshot.png)
 ⚡ Challenges Faced
 Feature Engineering: Combining genre, keywords, cast, and crew into a single feature set for similarity calculation was challenging.
 Data Cleaning: Handling missing or inconsistent metadata (e.g., missing cast info or keywords) required careful preprocessing.
