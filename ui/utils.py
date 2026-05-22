@@ -10,8 +10,11 @@ IMG_BASE = "https://image.tmdb.org/t/p/"
 # ── Data loading ───────────────────────────────────────────────────────────────
 @st.cache_resource(show_spinner=False)
 def load_data():
-    movies = pickle.load(open("movie_list.pkl", "rb"))
-    similarity = pickle.load(open("similarity.pkl", "rb"))
+    base_dir = os.path.dirname(__file__)
+    movies_path = os.path.join(base_dir, "movie_list.pkl")
+    similarity_path = os.path.join(base_dir, "similarity.pkl")
+    movies = pickle.load(open(movies_path, "rb"))
+    similarity = pickle.load(open(similarity_path, "rb"))
     return movies, similarity
 
 # ── TMDB helpers ───────────────────────────────────────────────────────────────
@@ -101,69 +104,18 @@ def nav_to(page, **kwargs):
 
 # ── Shared UI components ───────────────────────────────────────────────────────
 def render_navbar(active="home"):
-    pages = [("🎬", "CineMatch", "home"), ("🔍", "Search", "search"), ("ℹ️", "About", "about")]
-    tabs = " ".join(
-        f'<button class="nav-btn {"active" if active == p else ""}" onclick="window.location.href=\'?nav={p}\'">{icon} {label}</button>'
-        for icon, label, p in pages
-    )
-    st.markdown(f"""
-    <style>
-    .navbar {{
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 1rem 2.5rem;
-        background: rgba(10,10,15,0.95);
-        backdrop-filter: blur(12px);
-        border-bottom: 1px solid var(--border);
-        position: sticky;
-        top: 0;
-        z-index: 100;
-    }}
-    .nav-logo {{
-        font-family: 'Playfair Display', serif;
-        font-size: 1.4rem;
-        font-weight: 900;
-        color: var(--accent);
-        margin-right: auto;
-        letter-spacing: -0.02em;
-    }}
-    .nav-btn {{
-        background: none;
-        border: none;
-        color: var(--muted);
-        font-family: 'DM Sans', sans-serif;
-        font-size: 0.9rem;
-        font-weight: 500;
-        padding: 0.45rem 1rem;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.2s;
-        text-decoration: none;
-    }}
-    .nav-btn:hover, .nav-btn.active {{
-        background: var(--surface2);
-        color: var(--text);
-    }}
-    .nav-btn.active {{ color: var(--accent); }}
-    </style>
-    <div class="navbar">
-        <span class="nav-logo">🎬 CineMatch</span>
-        {tabs}
-    </div>
-    """, unsafe_allow_html=True)
-
-    # Streamlit buttons for actual nav (hidden visually behind HTML buttons above)
-    cols = st.columns([6, 1, 1, 1])
-    with cols[1]:
-        if st.button("Home", key="nav_home"):
+    st.markdown("### 🎬 CineMatch")
+    cols = st.columns(3)
+    with cols[0]:
+        if st.button("Home", key="nav_home", use_container_width=True, disabled=active == "home"):
             nav_to("home")
-    with cols[2]:
-        if st.button("Search", key="nav_search"):
+    with cols[1]:
+        if st.button("Search", key="nav_search", use_container_width=True, disabled=active == "search"):
             nav_to("search")
-    with cols[3]:
-        if st.button("About", key="nav_about"):
+    with cols[2]:
+        if st.button("About", key="nav_about", use_container_width=True, disabled=active == "about"):
             nav_to("about")
+    st.divider()
 
 def star_rating(score_10):
     filled = int(round(score_10 / 2))

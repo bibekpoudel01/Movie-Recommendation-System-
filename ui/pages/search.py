@@ -186,7 +186,18 @@ def render():
 
     # ── Recommendations ────────────────────────────────────────────────────────
     if search_clicked and data_ok and selected:
-        recs = recommend(selected, movies, similarity, n=5)
+        st.session_state.current_search = selected
+        st.session_state.current_recs = recommend(selected, movies, similarity, n=5)
+        st.session_state.current_movies_df = movies
+        st.session_state.current_similarity = similarity
+    
+    # Show cached recommendations if they exist
+    if "current_recs" in st.session_state and "current_search" in st.session_state:
+        recs = st.session_state.current_recs
+        selected = st.session_state.current_search
+        movies = st.session_state.current_movies_df
+        similarity = st.session_state.current_similarity
+        data_ok = True
 
         st.markdown(f"""
         <div class="results-header">

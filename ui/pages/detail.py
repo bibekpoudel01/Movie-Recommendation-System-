@@ -1,19 +1,23 @@
 import streamlit as st
 from utils import (fetch_movie_details, fetch_poster, fetch_backdrop,
                    nav_to, render_navbar, badge, get_year, get_rating,
-                   get_genres, get_cast, get_imdb_url, get_trailer_url, star_rating,
-                   load_data, recommend)
+                   get_genres, get_cast, get_imdb_url, get_trailer_url, star_rating)
 
 def render():
-    render_navbar()
+    render_navbar("detail")
 
     movie_id    = st.session_state.get("detail_movie_id")
     movie_title = st.session_state.get("detail_movie_title", "Unknown")
 
     if not movie_id:
-        st.warning("No movie selected. Go back to Search.")
-        if st.button("← Back to Search"):
-            nav_to("search")
+        st.warning("⚠️  No movie selected. Please go back and choose a movie.")
+        st.divider()
+        col1, col2, col3 = st.columns(3)
+        with col2:
+            if st.button("← Back to Search"):
+                st.session_state.pop("current_recs", None)
+                st.session_state.pop("current_search", None)
+                nav_to("search")
         return
 
     st.markdown("""
@@ -104,8 +108,8 @@ def render():
     /* Cast grid */
     .cast-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-        gap: 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 0.8rem;
         margin-bottom: 2.5rem;
     }
     .cast-card {
@@ -120,8 +124,8 @@ def render():
         border-color: var(--accent);
         transform: translateY(-2px);
     }
-    .cast-card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; }
-    .cast-card-info { padding: 0.5rem 0.3rem; }
+    .cast-card img { width: 100%; height: auto; max-height: 140px; object-fit: contain; display: block; }
+    .cast-card-info { padding: 0.4rem 0.3rem; }
     .cast-card-name {
         font-size: 0.78rem;
         font-weight: 600;
@@ -193,6 +197,8 @@ def render():
     # Back button
     st.markdown('<div class="back-bar">', unsafe_allow_html=True)
     if st.button("← Back to Search"):
+        st.session_state.pop("detail_movie_id", None)
+        st.session_state.pop("detail_movie_title", None)
         nav_to("search")
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -201,7 +207,7 @@ def render():
         details   = fetch_movie_details(movie_id)
         poster    = fetch_poster(movie_id, size="w342")
         backdrop  = fetch_backdrop(movie_id)
-        cast      = get_cast(details, limit=8)
+        cast      = get_cast(details, limit=6)
         imdb_url  = get_imdb_url(details)
         trailer   = get_trailer_url(details)
 
