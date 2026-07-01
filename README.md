@@ -3,7 +3,7 @@
 
 ![Front Page](images/machine-learning-project-movie-recommendation-system.webp)
 
-Project Overview:
+Project Overview
 This is a content-based movie recommendation system built with Python and Streamlit. It suggests movies similar to a selected movie by comparing movie features such as genre, keywords, cast, and crew. Recommendations are generated using a precomputed similarity matrix based on these metadata features, and the app displays the top 5 recommended movies along with their posters in a clean and interactive web interface.
 
 ✨ Key Features
